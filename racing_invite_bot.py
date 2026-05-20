@@ -92,7 +92,7 @@ INVITE_COOLDOWN_SECONDS = 3600
 _invite_cooldowns: dict[str, float] = {}
 
 # ── Database ─────────────────────────────────────────────────────────────────
-DB_PATH = "racing_event.db"
+DB_PATH = os.getenv("DB_PATH", "invites.db")
 
 
 async def init_db() -> aiosqlite.Connection:

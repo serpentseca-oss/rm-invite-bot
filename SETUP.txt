@@ -167,3 +167,23 @@
       → Use /reset_event to wipe all data and set the event back to active.
         This clears points, invited_users, invite_links, daily_speech, and
         the leaderboard message ID. Then run /setup_leaderboard to repost.
+
+10. DEPLOYING TO RAILWAY
+──────────────────────────
+    The bot includes a Procfile for one-click Railway deployment.
+
+    Steps:
+      1. Push the project folder to a GitHub repo.
+      2. In Railway, create a new project → "Deploy from GitHub repo".
+      3. In the project settings, add a Volume:
+           • Mount Path:  /data
+      4. Add the following env variable in Railway's "Variables" tab:
+           DB_PATH = /data/invites.db
+      5. Add all other .env variables (DISCORD_TOKEN, GUILD_ID, etc.)
+         as Railway environment variables.
+      6. Deploy — Railway will use the Procfile (worker: python racing_invite_bot.py)
+         to start a long‑running worker process.
+
+    Without the Volume, the database will be lost on every restart.
+    With the Volume mounted at /data and DB_PATH set to /data/invites.db,
+    your event data persists across deploys.
