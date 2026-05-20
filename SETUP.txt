@@ -1,0 +1,169 @@
+============================================================
+ Racing Master Invite Bot — Setup Instructions
+============================================================
+
+1.  REQUIREMENTS
+─────────────────
+    • Python 3.10 or newer
+    • A Discord bot application (create one at https://discord.com/developers/applications)
+
+2.  INSTALL DEPENDENCIES
+──────────────────────────
+    Open a terminal in the bot's folder and run:
+
+        pip install discord.py aiosqlite python-dotenv
+
+    Or, if you prefer a requirements file, create `requirements.txt` with:
+
+        discord.py>=2.4.0
+        aiosqlite>=0.20.0
+        python-dotenv>=1.0.0
+
+    Then run:
+
+        pip install -r requirements.txt
+
+3.  CREATE THE .env FILE
+──────────────────────────
+    In the same folder as `racing_invite_bot.py`, create a file named `.env`
+    with the following contents (replace placeholders with your actual values):
+
+        DISCORD_TOKEN=your_bot_token_here
+        GUILD_ID=1234567890123456789
+        ANNOUNCEMENT_CHANNEL_ID=1234567890123456789
+        ACTIVE_CHANNEL_IDS=1234567890123456789,1234567890123456790
+        ADMIN_ROLE_ID=1234567890123456789
+        EVENT_START_DATE=2026-05-21
+
+    Field descriptions:
+    • DISCORD_TOKEN           — REQUIRED. Your bot's token from the Discord Developer Portal.
+    • GUILD_ID                — Optional. If set, slash commands sync instantly to this server
+                                 only (recommended during development). Leave empty for global sync.
+    • ANNOUNCEMENT_CHANNEL_ID — REQUIRED(1). The channel ID where milestone alerts,
+                                 event-end results, and the persistent leaderboard are posted.
+    • ACTIVE_CHANNEL_IDS      — REQUIRED(1). Comma-separated channel IDs where daily messages
+                                 are counted for speech points.
+    • ADMIN_ROLE_ID           — Optional. If set, users with this role can run all admin commands
+                                 (/post_invite_button, /setup_leaderboard, /stats, /end).
+                                 If empty, only users with the Administrator permission can.
+    • EVENT_START_DATE        — Optional (default: 2026-05-21). Anti-farm cutoff date in
+                                 YYYY-MM-DD format. Accounts created on or after this date
+                                 will NOT award invite points (prevents alt-account farming).
+
+    (1) These are required for full functionality, but the bot will not crash
+        if they are missing — the affected features simply won't fire.
+
+4.  INVITE THE BOT TO YOUR SERVER
+───────────────────────────────────
+    In the Discord Developer Portal → OAuth2 → URL Generator, select:
+        Scopes:  bot, applications.commands
+        Bot Permissions:
+            • Create Instant Invite
+            • Manage Server       (needed to read invite list)
+            • Read Messages / View Channels
+            • Send Messages
+            • Add Reactions
+            • Use Slash Commands
+
+    Use the generated URL to invite the bot to your server.
+
+5.  RUN THE BOT
+─────────────────
+        python racing_invite_bot.py
+
+    You should see log lines confirming:
+        • Database initialisation
+        • Invite cache loaded
+        • Slash commands synced
+        • "Bot is ready. All systems initialised."
+
+6.  VERIFY EVERYTHING WORKS
+────────────────────────────
+    In your Discord server, try these slash commands:
+
+      Player commands (ephemeral — only you see the response):
+        /invite           — generates a unique invite link (+10 pts per join)
+                             cooldown: 1 invite per hour
+        /rank             — top 10 leaderboard + your rank and reward tier
+                             eligibility (ephemeral)
+        /myinvites        — list of members you've invited + their status
+        /progress         — milestone progress bars (25K → 28K → 30K)
+
+      Admin commands (requires ADMIN_ROLE_ID or Administrator permission):
+        /post_invite_button — posts a public embed with 4 interactive buttons:
+                              🔗 Get Invite Link   📊 My Rank
+                              👥 My Invites        📈 Server Progress
+                              (all button replies are ephemeral)
+        /setup_leaderboard  — posts a persistent Top 10 leaderboard in the
+                              announcement channel; auto-refreshes every 10 min
+        /stats              — event statistics (inviters, valid invites,
+                              daily speakers, top 5, milestone progress)
+        /end                — freeze the event and announce winners
+        /reset_event        — wipe all data and reactivate the event
+        /export             — download a CSV of all participant data
+                              (user_id, username, invite_points,
+                               speech_points, total_points)
+
+7.  BACKGROUND TASKS
+──────────────────────
+    The bot runs a task every 10 minutes that:
+      • Checks guild member count and announces milestones (25K, 28K, 30K)
+        with an @everyone ping in the announcement channel.
+      • Refreshes the persistent leaderboard message (if /setup_leaderboard
+        was run) by editing the embed with the latest Top 10.
+
+8.  CUSTOMISING REWARDS & MILESTONES
+──────────────────────────────────────
+    Open `racing_invite_bot.py` and edit the constants at the top of the file:
+
+        MILESTONES            = [25000, 28000, 30000]
+        POINTS_PER_INVITE     = 10
+        POINTS_PER_DAILY_SPEECH = 2
+        INVITE_COOLDOWN_SECONDS = 3600     (1 hour cooldown between invites)
+
+        TIER_3_WINNER_COUNT = 5
+        TIER_3_REWARD       = "2 Gem Car Steels + 588 Gold"
+        TIER_2_MIN_POINTS   = 20
+        TIER_2_WINNER_COUNT = 10
+        TIER_2_REWARD       = "1 Gem Car Steel + 388 Gold"
+        TIER_1_MIN_POINTS   = 2
+        TIER_1_WINNER_COUNT = 20
+        TIER_1_REWARD       = "88 Diamonds + 288 Gold"
+
+    A full customisation guide is also included at the bottom of the script.
+
+9.  TROUBLESHOOTING
+─────────────────────
+    • "Missing 'Manage Server' permission"
+      → The bot cannot read the invite list. Give it the Manage Server permission
+        or re-invite with the correct scope.
+
+    • "I lack the 'Create Instant Invite' permission"
+      → The bot does not have permission to create invites in that channel.
+
+    • Slash commands don't appear
+      → Wait a moment after startup. If using GUILD_ID, ensure it's the correct
+        server ID. Otherwise commands will sync globally (can take up to 1 hour).
+
+    • Database locked / "database is locked"
+      → Only one instance of the bot should be running. Stop all other instances.
+
+    • Points not being awarded for messages
+      → Check that ACTIVE_CHANNEL_IDS is set correctly and the event is active
+        (event_state.active = '1' in the database).
+
+    • Leaderboard message not updating
+      → Ensure you ran /setup_leaderboard first. The message auto-refreshes
+        every 10 minutes alongside the milestone watcher.
+      → If the original message was deleted, run /setup_leaderboard again
+        (the old message ID is cleaned up automatically).
+
+    • Buttons on the invite panel not responding
+      → Keep the panel message in a channel the bot can read.
+      → If the bot restarts after posting the panel, the buttons still work
+        because they use persistent custom_ids (timeout=None).
+
+    • Need to restart the event entirely
+      → Use /reset_event to wipe all data and set the event back to active.
+        This clears points, invited_users, invite_links, daily_speech, and
+        the leaderboard message ID. Then run /setup_leaderboard to repost.
