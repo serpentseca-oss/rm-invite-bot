@@ -415,7 +415,7 @@ async def on_message(message: discord.Message):
 
         # Acknowledge silently with a reaction (avoids channel spam)
         try:
-            await message.add_reaction("✅")
+            await message.add_reaction("<:Diamonds_RM:1001695799274643588>")
         except discord.Forbidden:
             pass  # bot may not have 'Add Reactions' permission
 
