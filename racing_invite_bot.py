@@ -881,7 +881,7 @@ async def cmd_post_invite_button(interaction: discord.Interaction):
             "🎲 **2+ Points Draw (20 winners):** 88 Diamonds + 288 Gold\n\n"
             "📌 **How to Participate**\n\n"
             "**Invite:** Click 🔗 Get Invite Link below → share with friends → +10 pts each\n"
-            "**Chat:** Talk daily in <#1506202426707939428> → +2 pts/day\n"
+            "**Chat:** Talk daily in <#1506202426707939428> or <#819493701633310771> → +2 pts/day\n"
             "**Track:** Use the buttons below to see your rank, invites, and server progress in private\n\n"
             "Every invite and every message counts. Let's cross the finish line together! 🏎️"
         ),
