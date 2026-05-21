@@ -869,19 +869,19 @@ class InvitePanelView(discord.ui.View):
 async def cmd_post_invite_button(interaction: discord.Interaction):
     """Post a public message containing the InvitePanelView button row."""
     embed = discord.Embed(
-        title="🏁 Racing to 30K – Milestone Rally",
+        title="🏁 Racing to 30K – Milestone Giveaway",
         description=(
             "We're sprinting toward **30,000 members** – and you're in the driver's seat.\n"
             "Hit each milestone to unlock bigger prize pools. The more you invite and engage, the more you earn!\n\n"
-            "📅 **Event:** June 6 – June 20 (or until we hit 30K)\n"
+            "📅 **Event:** May 21 – June 4 (or extended depending on server progress)\n"
             "🎯 **Milestones:** 25,000 → 28,000 → 30,000\n\n"
             "🎁 **Reward Pools**\n\n"
-            "🏆 **Top 5 Leaderboard:** 2 Ruby Keys + 588 Gold\n"
-            "🎲 **20+ Points Draw (10 winners):** 1 Ruby Key + 388 Gold\n"
+            "🏆 **Top 5 Leaderboard:** 2 Ruby keys + 588 Gold\n"
+            "🎲 **20+ Points Draw (10 winners):** 1 Ruby key + 388 Gold\n"
             "🎲 **2+ Points Draw (20 winners):** 88 Diamonds + 288 Gold\n\n"
             "📌 **How to Participate**\n\n"
             "**Invite:** Click 🔗 Get Invite Link below → share with friends → +10 pts each\n"
-            "**Chat:** Talk in #garage-showoff or #track-chat daily → +2 pts/day\n"
+            "**Chat:** Talk daily in <#819493701633310771> or <#1506202426707939428> → +2 pts/day\n"
             "**Track:** Use the buttons below to see your rank, invites, and server progress in private\n\n"
             "Every invite and every message counts. Let's cross the finish line together! 🏎️"
         ),
@@ -1329,10 +1329,10 @@ if __name__ == "__main__":
 #   POINTS_PER_DAILY_SPEECH = 2                   ← points for daily message
 #
 #   TIER_3_WINNER_COUNT = 5                       ← how many top winners
-#   TIER_3_REWARD       = "2 Gem Car Steels + 588 Gold"
+#   TIER_3_REWARD       = "2 Ruby keys + 588 Gold"
 #   TIER_2_MIN_POINTS   = 20
 #   TIER_2_WINNER_COUNT = 10
-#   TIER_2_REWARD       = "1 Gem Car Steel + 388 Gold"
+#   TIER_2_REWARD       = "1 Ruby key + 388 Gold"
 #   TIER_1_MIN_POINTS   = 2
 #   TIER_1_WINNER_COUNT = 20
 #   TIER_1_REWARD       = "88 Diamonds + 288 Gold"
