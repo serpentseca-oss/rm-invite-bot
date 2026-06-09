@@ -1133,22 +1133,7 @@ async def cmd_end(interaction: discord.Interaction):
             t1_embed.add_field(name="Winners", value="No eligible participants.", inline=False)
         await channel.send(embed=t1_embed)
 
-        # Optional: DM Tier 3 winners (only a few, unlikely to cause rate limits)
-        for entry in tier3:
-            uid = int(entry["user_id"])
-            user = bot.get_user(uid)
-            if user:
-                dm_embed = discord.Embed(
-                    title="🎉 Congratulations! You won a Tier 3 prize!",
-                    description=(
-                        f"You placed in the **Top {TIER_3_WINNER_COUNT}** of the Racing Master "
-                        f"Invite Event with **{entry['points']}** points!\n\n"
-                        f"Your prize: **{TIER_3_REWARD}**\n\n"
-                        "Please contact an admin to claim your reward."
-                    ),
-                    color=discord.Color.gold(),
-                )
-                await safe_dm(user, embed=dm_embed)
+       
 
         log.info(
             f"Event ended. Tier3={len(tier3)}, Tier2={len(tier2)}, Tier1={len(tier1)}. "
