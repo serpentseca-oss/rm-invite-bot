@@ -68,12 +68,12 @@ except ValueError:
 # ── Reward constants ─────────────────────────────────────────────────────────
 # Tier 3: Top 5 by final points
 TIER_3_WINNER_COUNT = 5
-TIER_3_REWARD = "2 Gem Car Steels + 588 Gold"
+TIER_3_REWARD = "2 Ruby keys + 588 Gold"
 
 # Tier 2: Random draw from remaining users with ≥20 points (excl Top 5)
 TIER_2_MIN_POINTS = 20
 TIER_2_WINNER_COUNT = 10
-TIER_2_REWARD = "1 Gem Car Steel + 388 Gold"
+TIER_2_REWARD = "1 Ruby key + 388 Gold"
 
 # Tier 1: Random draw from remaining users with ≥2 points (excl higher tiers)
 TIER_1_MIN_POINTS = 2
