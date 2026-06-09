@@ -462,7 +462,7 @@ async def milestone_watcher():
                     await channel.send(
                         content="@everyone",
                         embed=embed,
-                        allowed_mentions=discord.AllowedMentions(everyone=True),
+                        #allowed_mentions=discord.AllowedMentions(everyone=True),
                     )
                     log.info(f"Milestone {ms} announced in guild '{guild.name}'.")
                 except discord.Forbidden:
